@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { ArrowRight } from 'lucide-react';
 import gsap from 'gsap';
 import OptionWheel, { OptionWheelHandle } from './OptionWheel';
@@ -18,8 +19,21 @@ const NAV_ITEMS = [
 /* All marquee card image URLs — preloaded on mount so they're cached by the
  * time the menu phase appears (video playback takes ~4s at 1.5x speed) */
 const MARQUEE_IMAGES = [
-  ...[...Array(5)].map((_, i) => `https://picsum.photos/seed/intel${i}/400/240`),
+  '/intel/career-file.webp',
+  '/intel/basketball.webp',
+  '/intel/travel.webp',
+  '/intel/game.webp',
+  '/intel/baby-care.webp',
   ...[...Array(5)].map((_, i) => `https://picsum.photos/seed/blog${i}/400/240`),
+];
+
+/* 「可公开的情报」5 张卡片：本地 WebP 图 + 标题（弹窗预览共用） */
+const INTEL_CARDS = [
+  { src: '/intel/career-file.webp', title: '职业档案' },
+  { src: '/intel/basketball.webp', title: '篮球' },
+  { src: '/intel/travel.webp', title: '旅游' },
+  { src: '/intel/game.webp', title: '游戏' },
+  { src: '/intel/baby-care.webp', title: '照顾婴儿' },
 ];
 
 export default function Hero() {
@@ -30,6 +44,8 @@ export default function Hero() {
   const menuCharRef = useRef<HTMLDivElement>(null);
 
   const [phase, setPhase] = useState<Phase>('intro');
+  /* Lightbox preview for 「可公开的情报」 cards */
+  const [intelPreview, setIntelPreview] = useState<{ src: string; title: string } | null>(null);
   const phaseRef = useRef<Phase>('intro');
   const endedLockRef = useRef(false);
   const slowDownRef = useRef(false);
@@ -38,6 +54,20 @@ export default function Hero() {
 
   /* Keep phaseRef in sync for use in non-reactive callbacks */
   useEffect(() => { phaseRef.current = phase; }, [phase]);
+
+  /* ── Lightbox: close on ESC ── */
+  useEffect(() => {
+    if (!intelPreview) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIntelPreview(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [intelPreview]);
+
+  /* Intel card sources / titles — see INTEL_CARDS */
+  const intelSrc = (i: number) => INTEL_CARDS[i].src;
+  const intelTitle = (i: number) => INTEL_CARDS[i].title;
 
   /* ── Preload all marquee card images on mount ──
    * The menu appears ~4s after Explore Now is clicked (video at 1.5x speed).
@@ -461,18 +491,26 @@ export default function Hero() {
             <div className="marquee-track">
               <div className="marquee-track-inner">
                 {[...Array(5)].map((_, i) => (
-                  <div key={i} className="marquee-card marquee-card-lg">
-                    <img src={`https://picsum.photos/seed/intel${i}/400/240`} alt="" loading="lazy" />
+                  <div
+                    key={i}
+                    className="marquee-card marquee-card-lg cursor-pointer"
+                    onClick={() => setIntelPreview({ src: intelSrc(i), title: intelTitle(i) })}
+                  >
+                    <img src={intelSrc(i)} alt={intelTitle(i)} loading="lazy" />
                     <div className="marquee-card-overlay">
-                      <span className="marquee-card-title">情报 #{i + 1}</span>
+                      <span className="marquee-card-title">{intelTitle(i)}</span>
                     </div>
                   </div>
                 ))}
                 {[...Array(5)].map((_, i) => (
-                  <div key={`dup-${i}`} className="marquee-card marquee-card-lg">
-                    <img src={`https://picsum.photos/seed/intel${i}/400/240`} alt="" loading="lazy" />
+                  <div
+                    key={`dup-${i}`}
+                    className="marquee-card marquee-card-lg cursor-pointer"
+                    onClick={() => setIntelPreview({ src: intelSrc(i), title: intelTitle(i) })}
+                  >
+                    <img src={intelSrc(i)} alt={intelTitle(i)} loading="lazy" />
                     <div className="marquee-card-overlay">
-                      <span className="marquee-card-title">情报 #{i + 1}</span>
+                      <span className="marquee-card-title">{intelTitle(i)}</span>
                     </div>
                   </div>
                 ))}
@@ -533,6 +571,40 @@ export default function Hero() {
         className="absolute inset-0 z-[5] pointer-events-none"
         style={{ background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%)' }}
       />
+
+      {/* ── Intel card lightbox ── */}
+      {intelPreview && createPortal(
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4 sm:p-6"
+          onClick={() => setIntelPreview(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={intelPreview.title}
+        >
+          <button
+            type="button"
+            onClick={() => setIntelPreview(null)}
+            aria-label="关闭"
+            className="absolute top-4 right-6 text-3xl leading-none text-white/60 hover:text-white transition-colors"
+          >
+            ×
+          </button>
+          <figure
+            className="flex max-w-[94vw] flex-col items-center gap-3"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={intelPreview.src}
+              alt={intelPreview.title}
+              className="max-h-[78vh] max-w-full rounded-lg object-contain shadow-[0_0_80px_rgba(0,0,0,0.8)]"
+            />
+            <figcaption className="text-sm tracking-[0.12em] text-white/70">
+              {intelPreview.title}
+            </figcaption>
+          </figure>
+        </div>,
+        document.body
+      )}
     </section>
   );
 }
