@@ -40,7 +40,7 @@
   - Hero GSAP 开场 timeline、About 数字计数器、各区块 cascade 入场
 - [x] 附加组件：GooeyNav、GradientWaves、MagicRings、OptionWheel
 - [x] 「可公开的情报」5 张自定义图 + 点击弹窗预览（Lightbox）
-- [x] **部署**：GitHub 公开仓库 `agocong/Conquer` + GitHub Pages 自动部署（push main 触发）
+- [x] **部署**：GitHub 公开仓库 `agocong/Conquer` + GitHub Pages 自动部署（push main 触发），已修复子路径白屏并验证渲染
 
 ---
 
@@ -65,4 +65,5 @@
 | 2026-10-10 | 「可公开的情报」全部卡片支持点击弹窗单独查看（Lightbox：点击遮罩/×/ESC 关闭，portal 至 body），构建通过 |
 | 2026-10-10 | 情报海报压缩：PNG 6196KB → WebP 91KB（sharp, q82），替换引用 `public/intel-poster.webp` 并删除原 PNG，构建通过 |
 | 2026-10-10 | 「可公开的情报」5 张卡片全部替换为用户新图（职业档案/篮球/旅游/游戏/照顾婴儿），存 `public/intel/*.webp`（合计 29MB→634KB），移除旧海报 `intel-poster.webp`，弹窗/预加载同步更新，构建通过 |
-| 2026-11-10 | 发布 GitHub：安装 gh CLI 并登录（补 workflow scope），创建公开仓库 `agocong/Conquer`，推送 main（3 提交），新增 Pages 部署工作流 `.github/workflows/deploy.yml`；首次部署因 Pages 启用晚于 run 而 404，重跑后上线成功 |
+| 2026-11-10 | 发布 GitHub：安装 gh CLI 并登录（补 workflow scope），创建公开仓库 `agocong/Conquer`，推送 main，新增 Pages 部署工作流 `.github/workflows/deploy.yml`；首次部署因 Pages 启用晚于 run 而 404，重跑后上线 |
+| 2026-11-10 | 修复线上白屏：`vite.config.ts` 增加 `base: '/Conquer/'`（Pages 子路径导致绝对资源路径 404），重新部署后浏览器验证渲染正常、资源无 404 |
