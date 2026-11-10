@@ -67,3 +67,4 @@
 | 2026-10-10 | 「可公开的情报」5 张卡片全部替换为用户新图（职业档案/篮球/旅游/游戏/照顾婴儿），存 `public/intel/*.webp`（合计 29MB→634KB），移除旧海报 `intel-poster.webp`，弹窗/预加载同步更新，构建通过 |
 | 2026-11-10 | 发布 GitHub：安装 gh CLI 并登录（补 workflow scope），创建公开仓库 `agocong/Conquer`，推送 main，新增 Pages 部署工作流 `.github/workflows/deploy.yml`；首次部署因 Pages 启用晚于 run 而 404，重跑后上线 |
 | 2026-11-10 | 修复线上白屏：`vite.config.ts` 增加 `base: '/Conquer/'`（Pages 子路径导致绝对资源路径 404），重新部署后浏览器验证渲染正常、资源无 404 |
+| 2026-11-10 | 修复图片/视频全挂：`Hero.tsx` 中 public 资源路径（character-intro.jpg、hero-intro-video.mp4、character-menu.jpg、logo-conquer.png、intel/*.webp）统一加 `BASE_URL` 前缀——JS 字符串不会被 Vite 自动改写子路径；浏览器实测图片 naturalWidth、视频 readyState=4、弹窗均正常 |
