@@ -18,22 +18,25 @@ const NAV_ITEMS = [
 
 /* All marquee card image URLs — preloaded on mount so they're cached by the
  * time the menu phase appears (video playback takes ~4s at 1.5x speed) */
+/* public 资源需带部署子路径前缀（GitHub Pages 挂在 /Conquer/ 下） */
+const B = import.meta.env.BASE_URL;
+
 const MARQUEE_IMAGES = [
-  '/intel/career-file.webp',
-  '/intel/basketball.webp',
-  '/intel/travel.webp',
-  '/intel/game.webp',
-  '/intel/baby-care.webp',
+  `${B}intel/career-file.webp`,
+  `${B}intel/basketball.webp`,
+  `${B}intel/travel.webp`,
+  `${B}intel/game.webp`,
+  `${B}intel/baby-care.webp`,
   ...[...Array(5)].map((_, i) => `https://picsum.photos/seed/blog${i}/400/240`),
 ];
 
 /* 「可公开的情报」5 张卡片：本地 WebP 图 + 标题（弹窗预览共用） */
 const INTEL_CARDS = [
-  { src: '/intel/career-file.webp', title: '职业档案' },
-  { src: '/intel/basketball.webp', title: '篮球' },
-  { src: '/intel/travel.webp', title: '旅游' },
-  { src: '/intel/game.webp', title: '游戏' },
-  { src: '/intel/baby-care.webp', title: '照顾婴儿' },
+  { src: `${B}intel/career-file.webp`, title: '职业档案' },
+  { src: `${B}intel/basketball.webp`, title: '篮球' },
+  { src: `${B}intel/travel.webp`, title: '旅游' },
+  { src: `${B}intel/game.webp`, title: '游戏' },
+  { src: `${B}intel/baby-care.webp`, title: '照顾婴儿' },
 ];
 
 export default function Hero() {
@@ -345,7 +348,7 @@ export default function Hero() {
         style={{ mixBlendMode: 'screen', opacity: 0 }}
       >
         <img
-          src="/character-intro.jpg"
+          src={`${B}character-intro.jpg`}
           alt=""
           className="w-full h-full object-cover"
           style={{ objectPosition: 'center center' }}
@@ -367,7 +370,7 @@ export default function Hero() {
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ objectPosition: 'center center' }}
-          src="/hero-intro-video.mp4"
+          src={`${B}hero-intro-video.mp4`}
           onTimeUpdate={handleVideoTimeUpdate}
           onEnded={handleVideoEnded}
         />
@@ -382,7 +385,7 @@ export default function Hero() {
         style={{ mixBlendMode: 'screen', opacity: 0 }}
       >
         <img
-          src="/character-menu.jpg"
+          src={`${B}character-menu.jpg`}
           alt=""
           className="w-full h-full object-cover"
           style={{ objectPosition: 'center center' }}
@@ -393,7 +396,7 @@ export default function Hero() {
       {/* ── Top bar: Logo (left) + Nav (right) ── */}
       <div className="hero-logo absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-6 sm:px-10 py-5">
         <img
-          src="/logo-conquer.png"
+          src={`${B}logo-conquer.png`}
           alt="Conquer"
           className="h-16 md:h-24 w-auto object-contain cursor-pointer"
           draggable={false}
