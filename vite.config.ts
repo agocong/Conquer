@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  // GitHub Pages 子路径
+  base: '/Conquer/',
   server: {
     host: '0.0.0.0',
     port: 5173,
