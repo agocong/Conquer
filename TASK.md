@@ -1,8 +1,9 @@
 # Website-Per — Prisma 创意工作室个人作品集网站
 
-> **当前阶段：** 动效大改造已完成并构建，待内容填充与部署
+> **当前阶段：** 已发布至 GitHub 并通过 Pages 上线，待内容填充
 > **创建日期：** 2026-06-20
-> **最近更新：** 2026-10-10
+> **最近更新：** 2026-11-10
+> **线上地址：** https://agocong.github.io/Conquer/ ｜ 仓库：https://github.com/agocong/Conquer
 
 ---
 
@@ -38,6 +39,8 @@
   - `AnimatedBlock` 新增 `titleReveal` / `cardCascade` / `parallaxReveal` 模式
   - Hero GSAP 开场 timeline、About 数字计数器、各区块 cascade 入场
 - [x] 附加组件：GooeyNav、GradientWaves、MagicRings、OptionWheel
+- [x] 「可公开的情报」5 张自定义图 + 点击弹窗预览（Lightbox）
+- [x] **部署**：GitHub 公开仓库 `agocong/Conquer` + GitHub Pages 自动部署（push main 触发）
 
 ---
 
@@ -46,7 +49,7 @@
 - [ ] **项目内容填充**：Projects 区块的具体作品展示
 - [ ] **视频内容集成**：HLS.js 已引入，视频源待配置
 - [ ] **响应式优化**：确认移动端适配（动效降级验证）
-- [ ] **部署配置**：构建产物部署到线上
+- [x] **部署配置**：已上线 GitHub Pages（push main 自动构建部署）
 
 ---
 
@@ -62,3 +65,4 @@
 | 2026-10-10 | 「可公开的情报」全部卡片支持点击弹窗单独查看（Lightbox：点击遮罩/×/ESC 关闭，portal 至 body），构建通过 |
 | 2026-10-10 | 情报海报压缩：PNG 6196KB → WebP 91KB（sharp, q82），替换引用 `public/intel-poster.webp` 并删除原 PNG，构建通过 |
 | 2026-10-10 | 「可公开的情报」5 张卡片全部替换为用户新图（职业档案/篮球/旅游/游戏/照顾婴儿），存 `public/intel/*.webp`（合计 29MB→634KB），移除旧海报 `intel-poster.webp`，弹窗/预加载同步更新，构建通过 |
+| 2026-11-10 | 发布 GitHub：安装 gh CLI 并登录（补 workflow scope），创建公开仓库 `agocong/Conquer`，推送 main（3 提交），新增 Pages 部署工作流 `.github/workflows/deploy.yml`；首次部署因 Pages 启用晚于 run 而 404，重跑后上线成功 |
