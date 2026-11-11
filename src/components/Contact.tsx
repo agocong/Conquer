@@ -1,9 +1,10 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, Suspense, lazy } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SectionHeader from './SectionHeader';
 import AnimatedBlock from './AnimatedBlock';
-import MagicRings from './MagicRings';
+/* Three.js 仅此组件用到（486KB），懒加载避免进首包 */
+const MagicRings = lazy(() => import('./MagicRings'));
 import { ArrowUpRight, Mail } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -25,28 +26,30 @@ export default function Contact() {
         className="absolute inset-0 pointer-events-none select-none"
         style={{ width: '100%', height: '100%', opacity: 0.35 }}
       >
-        <MagicRings
-          color="#004D40"
-          colorTwo="#00D4AA"
-          ringCount={5}
-          speed={0.6}
-          attenuation={8}
-          lineThickness={1.5}
-          baseRadius={0.3}
-          radiusStep={0.12}
-          scaleRate={0.08}
-          opacity={0.6}
-          blur={4}
-          noiseAmount={0.05}
-          rotation={15}
-          fadeIn={0.6}
-          fadeOut={0.6}
-          followMouse={true}
-          mouseInfluence={0.15}
-          hoverScale={1.1}
-          parallax={0.03}
-          clickBurst={false}
-        />
+        <Suspense fallback={null}>
+          <MagicRings
+            color="#004D40"
+            colorTwo="#00D4AA"
+            ringCount={5}
+            speed={0.6}
+            attenuation={8}
+            lineThickness={1.5}
+            baseRadius={0.3}
+            radiusStep={0.12}
+            scaleRate={0.08}
+            opacity={0.6}
+            blur={4}
+            noiseAmount={0.05}
+            rotation={15}
+            fadeIn={0.6}
+            fadeOut={0.6}
+            followMouse={true}
+            mouseInfluence={0.15}
+            hoverScale={1.1}
+            parallax={0.03}
+            clickBurst={false}
+          />
+        </Suspense>
       </div>
 
       <div className="max-w-page mx-auto relative z-10">

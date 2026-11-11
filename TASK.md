@@ -2,7 +2,7 @@
 
 > **当前阶段：** 已发布至 GitHub 并通过 Pages 上线，待内容填充
 > **创建日期：** 2026-06-20
-> **最近更新：** 2026-11-10
+> **最近更新：** 2026-11-11
 > **线上地址：** https://agocong.github.io/Conquer/ ｜ 仓库：https://github.com/agocong/Conquer
 
 ---
@@ -68,3 +68,4 @@
 | 2026-11-10 | 发布 GitHub：安装 gh CLI 并登录（补 workflow scope），创建公开仓库 `agocong/Conquer`，推送 main，新增 Pages 部署工作流 `.github/workflows/deploy.yml`；首次部署因 Pages 启用晚于 run 而 404，重跑后上线 |
 | 2026-11-10 | 修复线上白屏：`vite.config.ts` 增加 `base: '/Conquer/'`（Pages 子路径导致绝对资源路径 404），重新部署后浏览器验证渲染正常、资源无 404 |
 | 2026-11-10 | 修复图片/视频全挂：`Hero.tsx` 中 public 资源路径（character-intro.jpg、hero-intro-video.mp4、character-menu.jpg、logo-conquer.png、intel/*.webp）统一加 `BASE_URL` 前缀——JS 字符串不会被 Vite 自动改写子路径；浏览器实测图片 naturalWidth、视频 readyState=4、弹窗均正常 |
+| 2026-11-11 | 首屏性能瘦身：logo 1205KB PNG→37KB WebP（删除原图）；视频 preload auto→metadata（首屏少下约 900KB）；Three.js 改 React.lazy 懒加载（vendor-three 486KB 退出 index.html 首屏引用）；跑马灯 10 图预加载由挂载时推迟到视频阶段（首屏不再抢 5 个 picsum 外链带宽） |

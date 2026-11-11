@@ -72,16 +72,18 @@ export default function Hero() {
   const intelSrc = (i: number) => INTEL_CARDS[i].src;
   const intelTitle = (i: number) => INTEL_CARDS[i].title;
 
-  /* ── Preload all marquee card images on mount ──
-   * The menu appears ~4s after Explore Now is clicked (video at 1.5x speed).
-   * Starting preload on mount gives the browser maximum time to fetch & cache
-   * all 10 images before the menu phase renders. */
+  /* ── Preload marquee images during the video phase ──
+   * Menu appears ~4s after Explore Now is clicked (video at 1.5x speed).
+   * Preloading on mount would compete with the first screen (and 5 picsum
+   * external images would steal bandwidth from it), so wait for the video
+   * phase — still ~4s of cover time before the menu renders. */
   useEffect(() => {
+    if (phase !== 'video') return;
     MARQUEE_IMAGES.forEach((url) => {
       const img = new Image();
       img.src = url;
     });
-  }, []);
+  }, [phase]);
 
   /* ── Auto-jump: every 2s, randomly jump the wheel to one of the 5 words ── */
   const lastJumpRef = useRef(0);
@@ -367,7 +369,7 @@ export default function Hero() {
         <video
           ref={videoRef}
           playsInline
-          preload="auto"
+          preload="metadata"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ objectPosition: 'center center' }}
           src={`${B}hero-intro-video.mp4`}
@@ -396,7 +398,7 @@ export default function Hero() {
       {/* ── Top bar: Logo (left) + Nav (right) ── */}
       <div className="hero-logo absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-6 sm:px-10 py-5">
         <img
-          src={`${B}logo-conquer.png`}
+          src={`${B}logo-conquer.webp`}
           alt="Conquer"
           className="h-16 md:h-24 w-auto object-contain cursor-pointer"
           draggable={false}
