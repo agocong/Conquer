@@ -1,18 +1,39 @@
-import { useRef, useEffect, Suspense, lazy } from 'react';
+import { useRef, useEffect, useState, Suspense, lazy } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SectionHeader from './SectionHeader';
 import AnimatedBlock from './AnimatedBlock';
-/* Three.js 仅此组件用到（486KB），懒加载避免进首包 */
+/* Three.js 仅此组件用到（486KB）：lazy + 滚动临近才挂载，确保完全退出首屏带宽 */
 const MagicRings = lazy(() => import('./MagicRings'));
 import { ArrowUpRight, Mail } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Contact() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [ringsVisible, setRingsVisible] = useState(false);
+
+  /* 滚动距 Contact 200px 内才加载 MagicRings（连带 vendor-three 486KB） */
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setRingsVisible(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
     <section
       id="contact"
+      ref={sectionRef}
       className="relative pt-24 pb-10 px-4 md:px-8 lg:px-12 bg-[#0A1628] overflow-hidden"
     >
       {/* Top divider */}
@@ -21,12 +42,13 @@ export default function Contact() {
         style={{ backgroundColor: 'rgba(0,212,170,0.1)' }}
       />
 
-      {/* MagicRings background — teal ambient glow */}
+      {/* MagicRings background — teal ambient glow（滚动临近才挂载） */}
       <div
         className="absolute inset-0 pointer-events-none select-none"
         style={{ width: '100%', height: '100%', opacity: 0.35 }}
       >
-        <Suspense fallback={null}>
+        {ringsVisible && (
+          <Suspense fallback={null}>
           <MagicRings
             color="#004D40"
             colorTwo="#00D4AA"
@@ -49,7 +71,8 @@ export default function Contact() {
             parallax={0.03}
             clickBurst={false}
           />
-        </Suspense>
+          </Suspense>
+        )}
       </div>
 
       <div className="max-w-page mx-auto relative z-10">
